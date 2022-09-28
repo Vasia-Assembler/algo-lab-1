@@ -13,7 +13,10 @@ function insertionSort(arr) {
     return copy
 }
 
-const inputArr = [31, 41, 59, 26, 41, 58]
-const sortedArr = insertionSort(inputArr)
-const output = sortedArr.join(' ')
-console.log(output)
+const fs = require('fs')
+
+fs.readFile('./input.txt', 'utf8', (err, data) => {
+  const input = data.match(/[^\r\n]+/g)
+  const output = insertionSort(input[1].split(' ').map(Number))
+  fs.writeFile('./output.txt', output.join(' '), () => {})
+})
