@@ -1,5 +1,4 @@
 function insertionSort(arr) {
-    const n = arr.length;
     const copy = [...arr]
     const index_arr = []
     for (const i in copy) {
@@ -15,7 +14,9 @@ function insertionSort(arr) {
     return [index_arr, copy]
 }
 
-const inputArr = [1, 8, 4, 2, 3, 7, 5, 6, 9, 0]
-const [index, sortedArr] = insertionSort(inputArr)
-const output = (index.join(' ') + '\n') + sortedArr.join(' ')
-console.log(output)
+const fs = require('fs')
+fs.readFile('./input.txt', 'utf8', (err, data) => {
+    const input = data.match(/[^\r\n]+/g)
+    const output = insertionSort(input[1].split(' ').map(Number))
+    fs.writeFile('./output.txt', output[0].join(' ') + '\n' + output[1].join(' '), () => {})
+  })
