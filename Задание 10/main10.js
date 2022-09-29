@@ -46,10 +46,11 @@ function generate_palindrome(characters) {
         } else {
             if (n % 2 !== 0 && occurences > str.length) {
                 str = chr.repeat(occurences) // must be a single charcter string
-            } else {
-                const middle = (n + 1) / 2
+            } else if (n % 2 === 0) {
+                const middle = Math.floor(str.length / 2)
                 str = str.substring(0, middle) + chr.repeat(occurences) + str.substring(middle)
-            }
+            } else
+                continue
         }
     }
     return str
