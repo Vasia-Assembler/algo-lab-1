@@ -1,3 +1,36 @@
+function mergeSort (arr, predicate) {
+  if (arr.length === 1) {
+    return arr
+  }
+  const middle = Math.floor(arr.length / 2)
+  const left = arr.slice(0, middle)
+  const right = arr.slice(middle)
+  return merge(
+    mergeSort(left, predicate),
+    mergeSort(right, predicate),
+    predicate
+  )
+}
+
+
+function merge (left, right, predicate) {
+  let result = []
+  let indexLeft = 0
+  let indexRight = 0
+
+  while (indexLeft < left.length && indexRight < right.length) {
+    if (predicate(left[indexLeft], right[indexRight])) {
+      result.push(left[indexLeft])
+      indexLeft++
+    } else {
+      result.push(right[indexRight])
+      indexRight++
+    }
+  }
+
+  return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight))
+}
+
 function generate_palindrome(characters) {
     let str = ""
     for (const i in characters) {
@@ -27,7 +60,7 @@ function palindrome(n, str) {
     for (const i of str) {
         counts[i] = counts[i] ? counts[i] + 1 : 1
     }
-    const sorted = Object.keys(counts).sort().reverse().reduce((acc, key) => ({ ...acc, [key]: counts[key]}), {}) // so that palindrome is alphabetically the greatest
+    const sorted = mergeSort(Object.keys(counts), (a, b) => a > b).reduce((acc, key) => ({ ...acc, [key]: counts[key]}), {})
     return generate_palindrome(sorted)
 }
 
