@@ -14,7 +14,7 @@ function mergeSort (arr, predicate) {
 
 
 function merge (left, right, predicate) {
-  let result = []
+  const result = []
   let indexLeft = 0
   let indexRight = 0
 
@@ -44,7 +44,7 @@ function generate_palindrome(characters) {
             const repeated = chr.repeat(half)
             str = repeated + str + repeated
         } else {
-            if (n % 2 !== 0) {
+            if (n % 2 !== 0 && occurences > str.length) {
                 str = chr.repeat(occurences) // must be a single charcter string
             } else {
                 const middle = (n + 1) / 2
