@@ -1,57 +1,36 @@
-function mergeSort (arr, predicate) {
-  if (arr.length === 1) {
-    return arr
-  }
-  const middle = Math.floor(arr.length / 2)
-  const left = arr.slice(0, middle)
-  const right = arr.slice(middle)
-  return merge(
-    mergeSort(left, predicate),
-    mergeSort(right, predicate),
-    predicate
-  )
+const opArray = []
+
+function swap(arr, x, y) {
+  const tmp = arr[y]
+  arr[y] = arr[x]
+  arr[x] = tmp
+  opArray.push([x, y])
 }
 
-
-function merge (left, right, predicate) {
-  let result = []
-  let indexLeft = 0
-  let indexRight = 0
-
-  while (indexLeft < left.length && indexRight < right.length) {
-    if (predicate(left[indexLeft], right[indexRight])) {
-      result.push(left[indexLeft])
-      indexLeft++
-    } else {
-      result.push(right[indexRight])
-      indexRight++
+function selection_sort(arr) {
+  const copy = arr.slice()
+  const n = copy.length
+  for (let i = 0; i < n; ++i) {
+    let min = i
+    for (let j = i+1; j < n; ++j) {
+      if (copy[j] < copy[min]) min = j;
+    }
+    if (min != i) {
+      swap(copy, min, i)
     }
   }
-
-  return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight))
-}
-
-function sort(n, test_arr, f) {
-  const opArray = []
-  test_arr.sort((a, b) => {
-    opArray.push([Math.min(a, b), Math.max(a, b)])
-    return a - b
-  })
-  return opArray
+  return copy
 }
 
 const fs = require('fs/promises')
 
 async function w(data) {
     const input = data.match(/[^\r\n]+/g)
-    const opArray = []
-    mergeSort(input[1].split(' ').map(Number), (a, b) => {
-      opArray.push([Math.min(a, b), Math.max(a, b)])
-      return a < b
-    })
+    selection_sort(input[1].split(' ').map(Number))
+    let str = ''
     for (const i of opArray) {
-      await fs.appendFile('output.txt', 'Swap elements at indices ' + i[0] + ' and ' + i[1] + '\n', () => {})
+      str += 'Swap elements at indices ' + i[0] + ' and ' + i[1] + '\n'
     }
-    await fs.appendFile('output.txt', 'No more swaps needed.\n', () => {})
+    fs.appendFile('output.txt', str + 'No more swaps needed.\n', () => {})
 }
 fs.readFile('./input.txt', 'utf8').then((d) => w(d))
